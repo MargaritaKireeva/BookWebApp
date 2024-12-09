@@ -1,0 +1,26 @@
+﻿@page
+@model BooksModel
+@{
+}
+<h1>Книги</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Цена</th>
+            <th>Количество на складе</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model.Books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Price.ToString("C")</td>
+                <td>@book.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>
