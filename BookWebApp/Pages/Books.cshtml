@@ -3,7 +3,30 @@
 @{
 }
 <h1>Книги</h1>
-<table>
+
+@if (Model != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Автор</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.Books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td><a asp-page="BookById" asp-route-id="@book.Id">Подробнее</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@* <table>
     <thead>
         <tr>
             <th>Название</th>
@@ -23,4 +46,4 @@
             </tr>
         }
     </tbody>
-</table>
+</table> *@

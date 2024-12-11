@@ -17,5 +17,11 @@ namespace BookWebApp
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<IEnumerable<Book>>();
         }
+        public async Task<Book> GetBookAsync(int id)
+        {
+            var response = await _client.GetAsync($"api/Books/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<Book>();
+        }
     }
 }

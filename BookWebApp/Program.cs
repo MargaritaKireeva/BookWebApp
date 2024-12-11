@@ -8,10 +8,23 @@ builder.Services.AddRazorPages();
 /*builder.Services.AddRazorRuntimeCompilation();*/
 builder.Services.AddHttpClient("HttpBookService", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7048/"); // Укажите адрес BookService
+    client.BaseAddress = new Uri("https://localhost:7048/"); 
 });
 
+builder.Services.AddHttpClient("HttpCartService", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7265/"); 
+});
+builder.Services.AddHttpContextAccessor(); 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+});
 builder.Services.AddScoped<BookServiceClient>();
+builder.Services.AddScoped<CartServiceClient>();
+
 
 var app = builder.Build();
 
@@ -29,6 +42,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 
 

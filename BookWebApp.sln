@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookWebApp", "BookWebApp\Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookService", "BookService\BookService.csproj", "{50E4A7B7-B46C-40CC-8335-75C31222713F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartService", "CartService\CartService.csproj", "{0AA5076C-8022-4C51-928B-00097D86CF89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartService", "CartService\CartService.csproj", "{0AA5076C-8022-4C51-928B-00097D86CF89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

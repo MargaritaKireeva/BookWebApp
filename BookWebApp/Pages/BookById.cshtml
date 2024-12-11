@@ -1,0 +1,33 @@
+﻿@page "{id:int}"
+@model BookWebApp.Pages.BookByIdModel
+@{
+    ViewData["Title"] = Model.Title ?? "Книга не найдена";
+}
+<h1>@Model.Title</h1>
+<p><strong>Автор:</strong> @Model.Author</p>
+<p><strong>Цена:</strong> @Model.Price.ToString("C")</p>
+<p><strong>Количество на складе:</strong> @Model.Quantity</p>
+
+<form method="post" asp-page-handler="AddToCart">
+    <input type="hidden" name="BookId" value="@Model.Id" />
+    <input type="number" name="Quantity" value="1" min="1" max="@Model.Quantity" />
+    <button type="submit">Добавить в корзину</button>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-alert" class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var alert = document.getElementById("success-alert");
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 3000); // 3000 миллисекунд = 3 секунды
+    </script>
+}
+
+<a asp-page="Books">Вернуться к списку книг</a>

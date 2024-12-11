@@ -26,10 +26,10 @@ namespace CartService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCart([FromBody] Cart cart)
+        public async Task<ActionResult<Cart>> AddCart([FromBody] Cart cart)
         {
-            await _cartService.AddCartAsync(cart);
-            return CreatedAtAction(nameof(GetUserCart), new { cartId = cart.Id }, cart);
+            return await _cartService.AddCartAsync(cart);
+            /*return CreatedAtAction(nameof(GetUserCart), new { cartId = cart.Id }, cart);*/
         }
 
         [HttpPut]
@@ -48,7 +48,7 @@ namespace CartService.Controllers
 
         // Методы для управления элементами в корзине
 
-        [HttpPost("{cartId}/items")]
+        [HttpPost("{cartId}/Items")]
         public async Task<ActionResult> AddItemToCart(int cartId, [FromBody] CartItem item)
         {
             await _cartService.AddItemToCartAsync(cartId, item);

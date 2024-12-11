@@ -25,6 +25,7 @@ namespace BookWebApp.Pages
                         Author = author;
                         Price = price;
                         Quantity = quantity;*/
+
         }
     }
 }

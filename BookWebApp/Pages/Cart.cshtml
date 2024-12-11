@@ -1,0 +1,53 @@
+﻿@page
+@model CartModel
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h1>Корзина</h1>
+
+@if (Model.CartItems.Count == 0)
+{
+    <p>Ваша корзина пуста.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Книга</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>@item.Book.Price.ToString("C")</td>
+                    <td>
+                        <form method="post" asp-page-handler="UpdateQuantity">
+                            <input type="hidden" name="bookId" value="@item.Book.Id" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" />
+                            <button type="submit" class="btn btn-primary">Обновить</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="RemoveItem">
+                            <input type="hidden" name="bookId" value="@item.Book.Id" />
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="alert alert-info">
+        Общая сумма: @Model.CartItems.Sum(i => i.Book.Price * i.Quantity).ToString("C")
+    </div>
+
+   @*  <a asp-page="/Checkout" class="btn btn-success">Перейти к оформлению заказа</a> *@
+}

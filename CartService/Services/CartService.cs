@@ -19,9 +19,9 @@ namespace CartService.Services
             return await _cartRepository.GetCartByIdAsync(cartId);
         }
 
-        public async Task AddCartAsync(Cart cart)
+        public async Task<Cart> AddCartAsync(Cart cart)
         {
-            await _cartRepository.AddCartAsync(cart); 
+            return await _cartRepository.AddCartAsync(cart); 
         }
 
         public async Task UpdateCartAsync(Cart cart)

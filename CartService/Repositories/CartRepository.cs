@@ -20,11 +20,15 @@ namespace CartService.Repositories
             return await _context.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.Id == cartId);
         }
 
-        public async Task AddCartAsync(Cart cart)
+        public async Task<Cart> AddCartAsync(Cart cart)
         {
             await _context.Carts.AddAsync(cart);
             await _context.SaveChangesAsync();
+            return await _context.Carts
+       .OrderByDescending(c => c.Id) 
+       .FirstOrDefaultAsync();
         }
+
 
         public async Task UpdateCartAsync(Cart cart)
         {
@@ -48,8 +52,17 @@ namespace CartService.Repositories
             var cart = await GetCartByIdAsync(cartId);
             if (cart != null)
             {
-                item.CartId = cartId; // Устанавливаем идентификатор корзины
-                await _context.CartItems.AddAsync(item);
+                var existingItem = cart.Items.FirstOrDefault(i => i.BookId == item.BookId);
+
+                if (existingItem != null)
+                {
+                    existingItem.Quantity += item.Quantity;
+                    _context.Update(existingItem);
+                }
+                else
+                {
+                    cart.Items.Add(item);
+                }
                 await _context.SaveChangesAsync();
             }
         }
