@@ -36,9 +36,14 @@ namespace BookWebApp.Pages
         {
             // Создание новой корзины или получение существующей
             var cart = await _cartService.GetCartAsync();
-
-            // Создание элемента корзины
-            var cartItem = new CartItem
+            
+            if (quantity > Quantity)
+            {
+                // Возвращаем уведомление о том, что количество превышает доступное
+                ModelState.AddModelError(string.Empty, "Нельзя добавить в корзину количество большее чем доступное.");
+            }
+                // Создание элемента корзины
+                var cartItem = new CartItem
             {
                 BookId = bookId,
                 Quantity = quantity

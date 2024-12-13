@@ -62,7 +62,7 @@ namespace CartService.Controllers
             return Ok(items);
         }
 
-        [HttpPut("items")]
+        [HttpPut("items/{itemId}")]
         public async Task<IActionResult> UpdateItem([FromBody] CartItem item)
         {
             await _cartService.UpdateItemInCartAsync(item);

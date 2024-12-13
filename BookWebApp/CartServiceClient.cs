@@ -52,28 +52,25 @@ namespace BookWebApp
             var response = await _client.PostAsJsonAsync($"api/Cart/{cartId}/Items", item);
             response.EnsureSuccessStatusCode();
         }
-        public async Task<List<CartItem>> GetCartItemsAsync()
+        public async Task<List<CartItem>> GetCartItemsAsync(int cartId)
         {
-            var response = await _client.GetAsync("api/cart");
+            var response = await _client.GetAsync($"api/cart/{cartId}/items");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<List<CartItem>>();
         }
 
         // Обновление количества товара в корзине
-        public async Task UpdateCartItemQuantityAsync(CartItem item, int quantity)
+        public async Task UpdateCartItemQuantityAsync(CartItem item)
         {
-            // Обновляем количество в объекте CartItem
-            item.Quantity = quantity;
-
-            var response = await _client.PutAsJsonAsync("api/cart/items", item);
+            var response = await _client.PutAsJsonAsync($"api/Cart/items/{item.Id}", item);
             response.EnsureSuccessStatusCode();
         }
 
         // Удаление товара из корзины
         public async Task RemoveCartItemAsync(int itemId)
         {
-            var response = await _client.DeleteAsync($"api/cart/items/{itemId}");
+            var response = await _client.DeleteAsync($"api/Cart/items/{itemId}");
             response.EnsureSuccessStatusCode();
         }
     }

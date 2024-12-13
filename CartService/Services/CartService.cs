@@ -2,16 +2,20 @@
 using System.Threading.Tasks;
 using CartService.Models;
 using CartService.Repositories;
+using Shared;
+using Shared.Events;
 
 namespace CartService.Services
 {
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IEventBus _eventBus;
 
-        public CartService(ICartRepository cartRepository)
+        public CartService(ICartRepository cartRepository, IEventBus eventBus)
         {
             _cartRepository = cartRepository;
+            _eventBus = eventBus;
         }
 
         public async Task<Cart> GetCartByIdAsync(int cartId)
@@ -51,7 +55,36 @@ namespace CartService.Services
 
         public async Task<List<CartItem>> GetItemsInCartAsync(int cartId)
         {
-            return await _cartRepository.GetItemsInCartAsync(cartId); 
+            var cartItems = await _cartRepository.GetItemsInCartAsync(cartId);
+            var books = new List<Book>();
+
+            foreach (var item in cartItems)
+            {
+                // Отправляем запрос на получение книги через RabbitMQ
+                var bookRequestEvent = new BookRequestEvent { BookId = item.BookId };
+                var bookResponse = await _eventBus.RequestBook(bookRequestEvent); // Получаем ответ от BookService
+                var book = new Book
+                {
+                    Id = bookResponse.Id,
+                    Author = bookResponse.Author,
+                    Price = bookResponse.Price,
+                    Title = bookResponse.Title,
+                    Quantity = bookResponse.Quantity
+                };
+                books.Add(book);
+            }
+
+            // Объединяем данные о книгах с элементами корзины
+            foreach (var item in cartItems)
+            {
+                var book = books.FirstOrDefault(b => b.Id == item.BookId);
+                if (book != null)
+                {
+                    item.Book = book; 
+                }
+            }
+
+            return cartItems;
         }
     }
 }

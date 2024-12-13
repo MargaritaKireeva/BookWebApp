@@ -18,15 +18,17 @@ namespace BookWebApp.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            var cart = await _cartService.GetCartAsync();
             // Получаем элементы корзины для текущего пользователя
-            CartItems = await _cartService.GetCartItemsAsync(); // Метод получения элементов корзины
+            CartItems = await _cartService.GetCartItemsAsync(cart.Id); // Метод получения элементов корзины
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdateQuantityAsync(CartItem item, int quantity)
+        public async Task<IActionResult> OnPostUpdateQuantityAsync(CartItem item)
         {
+           // item.Book = null;
             // Логика обновления количества товара в корзине
-            await _cartService.UpdateCartItemQuantityAsync(item, quantity);
+            await _cartService.UpdateCartItemQuantityAsync(item);
             return RedirectToPage(); // Перенаправляем на ту же страницу после обновления
         }
 

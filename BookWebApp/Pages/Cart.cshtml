@@ -29,14 +29,16 @@ else
                     <td>@item.Book.Price.ToString("C")</td>
                     <td>
                         <form method="post" asp-page-handler="UpdateQuantity">
-                            <input type="hidden" name="bookId" value="@item.Book.Id" />
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" />
+                            <input type="hidden" name="BookId" value="@item.BookId" />
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <input type="hidden" name="CartId" value="@item.CartId" />
+                            <input type="number" name="Quantity" value="@item.Quantity" min="1" max="item.Book.Quantity"/>
                             <button type="submit" class="btn btn-primary">Обновить</button>
                         </form>
                     </td>
                     <td>
                         <form method="post" asp-page-handler="RemoveItem">
-                            <input type="hidden" name="bookId" value="@item.Book.Id" />
+                            <input type="hidden" name="itemId" value="@item.Id" />
                             <button type="submit" class="btn btn-danger">Удалить</button>
                         </form>
                     </td>
