@@ -1,9 +1,8 @@
-using CartService.Consumers;
-using CartService.Data;
-using CartService.Repositories;
-using CartService.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using OrderService.Data;
+using OrderService.Repositories;
+using OrderService.Services;
 using Shared;
 using Shared.Events;
 
@@ -15,10 +14,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<ICartService, CartService.Services.CartService>();
-builder.Services.AddDbContext<CartDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CartConnection")));
+
+builder.Services.AddDbContext<OrderDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("OrderConnection")));
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService.Services.OrderService>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -33,17 +34,12 @@ builder.Services.AddMassTransit(x =>
 
     });
 
-    // Регистрация IRequestClient для BookRequestEvent
-    x.AddRequestClient<BookRequestEvent>();
     x.AddRequestClient<CartRequestEvent>();
-    x.AddConsumer<CartRequestConsumer>();
 
     // Регистрация EventBusRabbitMQ
     x.AddScoped<IEventBus, EventBusRabbitMQ>();
 
 });
-
-builder.Services.AddMassTransitHostedService();
 
 var app = builder.Build();
 
