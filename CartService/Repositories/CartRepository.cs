@@ -73,6 +73,34 @@ namespace CartService.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<CartItem>> GetCartItemsByBookId(int bookId)
+        {
+            return await _context.CartItems.Where(ci => ci.BookId == bookId).ToListAsync();
+        }
+
+        public async Task UpdateCartItemAsync(CartItem item)
+        {
+            var existingItem = await _context.CartItems.FindAsync(item.Id);
+
+            if (existingItem != null)
+            {
+                existingItem.Quantity = item.Quantity;
+                _context.CartItems.Update(item);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveCartItemAsync(int itemId)
+        {
+            var itemToRemove = await _context.CartItems.FindAsync(itemId);
+
+            if (itemToRemove != null)
+            {
+                _context.CartItems.Remove(itemToRemove);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task RemoveItemFromCartAsync(int itemId)
         {
             var item = await _context.CartItems.FindAsync(itemId);

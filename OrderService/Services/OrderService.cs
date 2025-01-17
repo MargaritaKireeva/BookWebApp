@@ -45,6 +45,16 @@ namespace OrderService.Services
                 await _orderRepository.AddItemInOrderAsync(orderItem);
             }
             order.OrderItems = orderItems;
+            var orderCreatedEvent = new OrderCreatedEvent
+            {
+                OrderId = order.Id,
+                OrderItems = order.OrderItems.Select(oi => new OrderCreatedEvent.OrderItemInfo
+                {
+                    BookId = oi.BookId,
+                    Quantity = oi.Quantity
+                }).ToList()
+            };
+            await _eventBus.Publish(orderCreatedEvent);
             return order;
         }
 

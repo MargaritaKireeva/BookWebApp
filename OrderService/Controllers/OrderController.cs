@@ -16,8 +16,8 @@ public class OrdersController : ControllerBase
     }
 
     // Метод для создания заказа
-    [HttpPost]
-    public async Task<IActionResult> CreateOrder(int cartId)
+    [HttpPost("{cartId}")]
+    public async Task<Order> CreateOrder(int cartId)
     {
   /*      if (orderItems == null || !orderItems.Any())
         {
@@ -26,7 +26,7 @@ public class OrdersController : ControllerBase
 
         var order = await _orderService.CreateOrderAsync(cartId);
 
-        return CreatedAtAction(nameof(GetOrders), new { cartId }, order);
+        return order;
     }
 
     // Метод для получения заказов по идентификатору корзины

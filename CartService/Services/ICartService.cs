@@ -13,5 +13,8 @@ namespace CartService.Services
         Task UpdateItemInCartAsync(CartItem item);
         Task RemoveItemFromCartAsync(int itemId);
         Task<List<CartItem>> GetItemsInCartAsync(int cartId);
+        Task<List<CartItem>> GetCartItemsByBookId(int bookId);
+        Task UpdateCartItemAsync(CartItem item);
+        Task RemoveCartItemAsync(int itemId);
     }
 }

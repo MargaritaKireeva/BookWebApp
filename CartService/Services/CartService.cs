@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CartService.Models;
 using CartService.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.Events;
 
@@ -86,5 +87,20 @@ namespace CartService.Services
 
             return cartItems;
         }
+        public async Task<List<CartItem>> GetCartItemsByBookId(int bookId)
+        {
+            return await _cartRepository.GetCartItemsByBookId(bookId);
+        }
+
+        public async Task UpdateCartItemAsync(CartItem item)
+        {
+            await _cartRepository.UpdateCartItemAsync(item);
+        }
+
+        public async Task RemoveCartItemAsync(int itemId)
+        {
+            await _cartRepository.RemoveCartItemAsync(itemId);
+        }
+
     }
 }

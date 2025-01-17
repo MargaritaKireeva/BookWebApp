@@ -37,6 +37,7 @@ builder.Services.AddMassTransit(x =>
     x.AddRequestClient<BookRequestEvent>();
     x.AddRequestClient<CartRequestEvent>();
     x.AddConsumer<CartRequestConsumer>();
+    x.AddConsumer<UpdateBookConsumer>();
 
     // Регистрация EventBusRabbitMQ
     x.AddScoped<IEventBus, EventBusRabbitMQ>();

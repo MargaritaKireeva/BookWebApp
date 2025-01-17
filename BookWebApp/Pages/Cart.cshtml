@@ -24,7 +24,7 @@ else
         <tbody>
             @foreach (var item in Model.CartItems)
             {
-                <tr>
+                <tr style="@(item.Quantity == 0 ? "color: gray;" : "")">
                     <td>@item.Book.Title</td>
                     <td>@item.Book.Price.ToString("C")</td>
                     <td>
@@ -33,7 +33,7 @@ else
                             <input type="hidden" name="Id" value="@item.Id" />
                             <input type="hidden" name="CartId" value="@item.CartId" />
                             <input type="number" name="Quantity" value="@item.Quantity" min="1" max="item.Book.Quantity"/>
-                            <button type="submit" class="btn btn-primary">Обновить</button>
+                            <button type="submit" class="btn btn-primary" @(item.Quantity == 0 ? "disabled" : "")>Обновить</button>
                         </form>
                     </td>
                     <td>
@@ -50,6 +50,8 @@ else
     <div class="alert alert-info">
         Общая сумма: @Model.CartItems.Sum(i => i.Book.Price * i.Quantity).ToString("C")
     </div>
-
-   @*  <a asp-page="/Checkout" class="btn btn-success">Перейти к оформлению заказа</a> *@
+     <form method="post" asp-page-handler="CreateOrder">
+       @*  <input type="hidden" name="CartId" value="@Model.Id" /> *@
+        <button class="btn btn-primary" @(Model.CartItems.Any(i => i.Quantity == 0) ? "disabled" : "")>Оформить заказ</button>
+    </form>
 }

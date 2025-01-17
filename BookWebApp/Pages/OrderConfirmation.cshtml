@@ -1,0 +1,16 @@
+﻿@page
+@model BookWebApp.Pages.OrderConfirmationModel
+@{
+
+}
+<h2>Подтверждение заказа</h2>
+
+@if (Model.OrderId > 0)
+{
+    <p>Ваш заказ был успешно оформлен!</p>
+    <p><strong>Идентификатор вашего заказа:</strong> @Model.OrderId</p>
+}
+else
+{
+    <p>Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.</p>
+}

@@ -4,6 +4,7 @@ using BookService.Repositories;
 using BookService.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 using Shared.Events;
 using System;
 
@@ -33,6 +34,8 @@ builder.Services.AddMassTransit(x =>
     });
     x.AddRequestClient<BookRequestEvent>();
     x.AddConsumer<BookRequestConsumer>(); // Регистрация consumer для обработки запросов на книгу
+    x.AddConsumer<OrderCreatedConsumer>();
+    x.AddScoped<IEventBus, EventBusRabbitMQ>();
 });
 
 builder.Services.AddMassTransitHostedService();

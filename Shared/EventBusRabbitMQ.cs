@@ -28,17 +28,21 @@ namespace Shared
     {
         Task<BookResponse> RequestBook(BookRequestEvent request);
         Task<CartResponse> RequestCartItems(CartRequestEvent request);
+        Task Publish<T>(T @event) where T : class;
+
     }
 
     public class EventBusRabbitMQ : IEventBus
     {
         private readonly IRequestClient<BookRequestEvent> _requestClient;
         private readonly IRequestClient<CartRequestEvent> _cartRequestClient;
+        private readonly IBus _bus;
 
-        public EventBusRabbitMQ(IRequestClient<BookRequestEvent> requestClient, IRequestClient<CartRequestEvent> cartRequestClient)
+        public EventBusRabbitMQ(IRequestClient<BookRequestEvent> requestClient, IRequestClient<CartRequestEvent> cartRequestClient, IBus bus)
         {
             _requestClient = requestClient;
             _cartRequestClient = cartRequestClient;
+            _bus = bus;
         }
 
         public async Task<BookResponse> RequestBook(BookRequestEvent request)
@@ -51,6 +55,11 @@ namespace Shared
         {
             var response = await _cartRequestClient.GetResponse<CartResponse>(request);
             return response.Message;
+        }
+
+        public async Task Publish<T>(T @event) where T : class
+        {
+            await _bus.Publish(@event);
         }
     }
 }
