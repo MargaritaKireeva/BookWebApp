@@ -1,6 +1,7 @@
 ﻿using BookService.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using MassTransit;
 
 namespace BookService.Data
 {
@@ -9,5 +10,7 @@ namespace BookService.Data
         public BookDbContext(DbContextOptions<BookDbContext> options) : base(options) { }
 
         public DbSet<Book> Books { get; set; }
+
+        public DbSet<Outbox> OutBoxMessages { get; set; }
     }
 }

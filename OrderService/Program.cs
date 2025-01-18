@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using OrderService;
 using OrderService.Data;
 using OrderService.Repositories;
 using OrderService.Services;
@@ -20,7 +21,8 @@ builder.Services.AddDbContext<OrderDbContext>(options =>
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService.Services.OrderService>();
-
+//builder.Services.AddScoped<OutboxPublisher>();
+builder.Services.AddHostedService<OutboxPublisher>();
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
@@ -40,7 +42,7 @@ builder.Services.AddMassTransit(x =>
     x.AddScoped<IEventBus, EventBusRabbitMQ>();
 
 });
-
+builder.Services.AddScoped<IEventBus, EventBusRabbitMQ>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

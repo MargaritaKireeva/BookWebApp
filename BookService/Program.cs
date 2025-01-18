@@ -3,6 +3,7 @@ using BookService.Data;
 using BookService.Repositories;
 using BookService.Services;
 using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.Events;
@@ -23,6 +24,11 @@ builder.Services.AddDbContext<BookDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
+/*    x.AddEntityFrameworkOutbox<BookDbContext>(o =>
+    {
+        o.QueryDelay = TimeSpan.FromSeconds(30);
+        o.UsePostgres().UseBusOutbox();
+    });*/
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(new Uri("amqps://vqzxgtrq:C7UGMO30btVKqLFcDRip2S4Su1g7C2KK@kebnekaise.lmq.cloudamqp.com/vqzxgtrq"), h =>

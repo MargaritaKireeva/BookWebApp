@@ -18,5 +18,7 @@ namespace OrderService.Data
         // DbSet для элементов заказа
         public DbSet<OrderItems> OrderItems { get; set; }
 
+        public DbSet<OutboxMessage> Outbox { get; set; }
+
     }
 }
