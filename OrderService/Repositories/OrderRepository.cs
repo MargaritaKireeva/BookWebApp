@@ -29,10 +29,11 @@ namespace OrderService.Repositories
             // Запрос элементов корзины
             var cartRequest = new CartRequestEvent { CartId = cartId };
             var cartResponse = await _eventBus.RequestCartItems(cartRequest);
-
+            int currentId = _context.Orders.ToList().Last().Id;
             // Создание нового заказа на основе полученных данных о корзине
             var order = new Order
             {
+                Id = OrderIdGenerator.GetNextId(currentId),
                 CartId = cartId,
                 TotalAmount = cartResponse.Items.Sum(item => item.Price * item.Quantity),
                 OrderDate = DateTime.UtcNow
@@ -41,9 +42,11 @@ namespace OrderService.Repositories
 
             try
             {
-               _context.Orders.Add(order);
-                var orders = await GetByCartIdAsync(cartId);
-                order = orders.LastOrDefault(order => order.CartId == cartId);
+                
+                _context.Orders.Add(order);
+                //order = _context.Orders.ToList().LastOrDefault(order => order.CartId == cartId);
+                //var orders = await GetByCartIdAsync(cartId);
+                //order = orders.LastOrDefault(order => order.CartId == cartId);
 
                 var orderItems = new List<OrderItems>();
                 foreach (var item in cartResponse.Items)
@@ -63,6 +66,7 @@ namespace OrderService.Repositories
                 var orderCreatedEvent = new OrderCreatedEvent
                 {
                     OrderId = order.Id,
+                    CartId= cartId,
                     OrderItems = order.OrderItems.Select(oi => new OrderCreatedEvent.OrderItemInfo
                     {
                         BookId = oi.BookId,

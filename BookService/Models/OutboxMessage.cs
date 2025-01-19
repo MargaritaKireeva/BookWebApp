@@ -1,6 +1,6 @@
 ﻿namespace BookService.Models
 {
-    public class Outbox
+    public class OutboxMessage
     {
         public int Id { get; set; }
         public string Content { get; set; }

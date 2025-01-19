@@ -8,12 +8,10 @@ namespace OrderService.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IEventBus _eventBus;
 
-        public OrderService(IOrderRepository orderRepository, IEventBus eventBus)
+        public OrderService(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
-            _eventBus = eventBus;
         }
 
         public async Task<Order> CreateOrderAsync(int cartId)

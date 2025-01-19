@@ -7,7 +7,7 @@ namespace CartService.Repositories
         Task<Cart> GetCartByIdAsync(int cartId);
         Task<Cart> AddCartAsync(Cart cart);
         Task UpdateCartAsync(Cart cart);
-        Task DeleteCartAsync(int id);
+        Task ClearCartAsync(int id);
         Task AddItemToCartAsync(int cartId, CartItem item);
         Task UpdateItemInCartAsync(CartItem item);
         Task RemoveItemFromCartAsync(int itemId);

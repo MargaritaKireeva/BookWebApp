@@ -34,9 +34,9 @@ namespace CartService.Services
             await _cartRepository.UpdateCartAsync(cart);
         }
 
-        public async Task DeleteCartAsync(int id)
+        public async Task ClearCartAsync(int id)
         {
-            await _cartRepository.DeleteCartAsync(id); 
+            await _cartRepository.ClearCartAsync(id); 
         }
 
         public async Task AddItemToCartAsync(int cartId, CartItem item)

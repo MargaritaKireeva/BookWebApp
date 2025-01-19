@@ -1,4 +1,6 @@
-﻿namespace OrderService.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace OrderService.Models
 {
     public class Order
     {
@@ -9,5 +11,15 @@
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         
+    }
+
+    public static class OrderIdGenerator
+    {
+       // private static int _currentId = 0;
+
+        public static int GetNextId(int _currentId)
+        {
+            return ++_currentId; 
+        }
     }
 }

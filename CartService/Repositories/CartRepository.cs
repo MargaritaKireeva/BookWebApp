@@ -36,19 +36,19 @@ namespace CartService.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCartAsync(int id)
+        public async Task ClearCartAsync(int cartId)
         {
-            var cart = await GetCartByIdAsync(id);
+            var cart = await _context.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.Id == cartId);
             if (cart != null)
             {
-                _context.Carts.Remove(cart);
+                _context.CartItems.RemoveRange(cart.Items);
                 await _context.SaveChangesAsync();
             }
         }
 
-        // Добавляем методы для управления элементами корзины
+                // Добавляем методы для управления элементами корзины
         public async Task AddItemToCartAsync(int cartId, CartItem item)
-        {
+        { 
             var cart = await GetCartByIdAsync(cartId);
             if (cart != null)
             {

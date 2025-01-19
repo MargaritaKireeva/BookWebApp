@@ -30,7 +30,10 @@ builder.Services.AddMassTransit(x =>
             h.Password("C7UGMO30btVKqLFcDRip2S4Su1g7C2KK");
         }); // Укажите адрес вашего RabbitMQ сервера
         cfg.ConfigureEndpoints(context); // Автоматическая конфигурация конечных точек
-
+        cfg.ReceiveEndpoint("order-queue-cart", e =>
+        {
+            e.ConfigureConsumer<OrderCreatedCartConsumer>(context);
+        });
     });
 
     // Регистрация IRequestClient для BookRequestEvent
@@ -38,6 +41,7 @@ builder.Services.AddMassTransit(x =>
     x.AddRequestClient<CartRequestEvent>();
     x.AddConsumer<CartRequestConsumer>();
     x.AddConsumer<UpdateBookConsumer>();
+    x.AddConsumer<OrderCreatedCartConsumer>();
 
     // Регистрация EventBusRabbitMQ
     x.AddScoped<IEventBus, EventBusRabbitMQ>();

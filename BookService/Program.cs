@@ -1,3 +1,4 @@
+using BookService;
 using BookService.Consumers;
 using BookService.Data;
 using BookService.Repositories;
@@ -21,7 +22,8 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IBookService, BookService.Services.BookService>();
 builder.Services.AddDbContext<BookDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BooksConnection")));
-
+builder.Services.AddHostedService<OutboxPublisher>();
+builder.Services.AddScoped<IEventBus, EventBusRabbitMQ>();
 builder.Services.AddMassTransit(x =>
 {
 /*    x.AddEntityFrameworkOutbox<BookDbContext>(o =>
@@ -36,6 +38,10 @@ builder.Services.AddMassTransit(x =>
             h.Username("vqzxgtrq");
             h.Password("C7UGMO30btVKqLFcDRip2S4Su1g7C2KK");
         }); // Укажите адрес вашего RabbitMQ сервера
+        cfg.ReceiveEndpoint("order-queue-books", e =>
+        {
+            e.ConfigureConsumer<OrderCreatedConsumer>(context);
+        });
         cfg.ConfigureEndpoints(context); // Автоматическая конфигурация конечных точек
     });
     x.AddRequestClient<BookRequestEvent>();

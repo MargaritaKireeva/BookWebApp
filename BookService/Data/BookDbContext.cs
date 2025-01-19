@@ -11,6 +11,6 @@ namespace BookService.Data
 
         public DbSet<Book> Books { get; set; }
 
-        public DbSet<Outbox> OutBoxMessages { get; set; }
+        public DbSet<OutboxMessage> Outbox { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace CartService.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart(int id)
         {
-            await _cartService.DeleteCartAsync(id);
+            await _cartService.ClearCartAsync(id);
             return NoContent();
         }
 

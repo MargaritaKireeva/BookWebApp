@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BookService.Data;
 using BookService.Models;
+using Shared.Events;
+using Shared;
+using System.Text.Json;
 
 namespace BookService.Repositories
 {
@@ -33,8 +36,28 @@ namespace BookService.Repositories
 
         public async Task UpdateAsync(Book book)
         {
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                _context.Books.Update(book);
+                var updateBookInfo = new UpdateBookEvent
+                {
+                    BookId = book.Id,
+                    Quantity = book.Quantity
+                };
+                var outBoxMessage = new OutboxMessage { Content = JsonSerializer.Serialize(updateBookInfo), Status = "Pending" };
+                await _context.Outbox.AddAsync(outBoxMessage);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+            //await _eventBus.Publish(updateBookInfo);
         }
 
         public async Task DeleteAsync(int id)

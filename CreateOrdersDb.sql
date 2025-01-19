@@ -9,7 +9,7 @@ GO
 
 -- Создание таблицы Orders
 CREATE TABLE Orders (
-    Id INT IDENTITY(1,1) PRIMARY KEY, 
+    Id INT NOT NULL PRIMARY KEY, 
 	CartId INT NOT NULL,                     
     TotalAmount DECIMAL(10, 2) NOT NULL,    
     OrderDate DATETIME NOT NULL DEFAULT GETDATE() 

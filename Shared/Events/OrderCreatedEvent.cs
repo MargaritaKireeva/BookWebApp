@@ -9,6 +9,7 @@ namespace Shared.Events
     public class OrderCreatedEvent
     {
         public int OrderId { get; set; } 
+        public int CartId { get; set; }
         public List<OrderItemInfo> OrderItems { get; set; }
 
         public class OrderItemInfo

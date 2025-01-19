@@ -11,12 +11,11 @@ namespace BookService.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IEventBus _eventBus;
+       
 
-        public BookService(IBookRepository bookRepository, IEventBus eventBus)
+        public BookService(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
-            _eventBus = eventBus;
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
@@ -36,12 +35,7 @@ namespace BookService.Services
         public async Task UpdateBookAsync(Book book)
         {
             await _bookRepository.UpdateAsync(book);
-            var updateBookInfo = new UpdateBookEvent
-            {
-                BookId = book.Id,
-                Quantity = book.Quantity
-            };
-            await _eventBus.Publish(updateBookInfo);
+
 
         }
 
